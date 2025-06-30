@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  worker:
+    build: .
+    container_name: bg-market-worker
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
+      - DATABASE_NAME=bg_market
+      - DATA_SOURCE_URL=${DATA_SOURCE_URL}
+      - CRON_SCHEDULE=${CRON_SCHEDULE:-0 */6 * * *}
+      - RUN_IMMEDIATELY=${RUN_IMMEDIATELY:-false}
+      - NODE_ENV=production
+    volumes:
+      - ./data:/usr/src/app/data
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    networks:
+      - bg-market-network
+
+  mongodb:
+    image: mongo:6.0
+    container_name: bg-market-mongodb
+    environment:
+      - MONGO_INITDB_DATABASE=bg_market
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+    networks:
+      - bg-market-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  bg-market-network:
+    driver: bridge 
