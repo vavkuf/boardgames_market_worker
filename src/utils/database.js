@@ -194,6 +194,32 @@ class Database {
       await this.connect();
     }
   }
+
+  /**
+   * Create indexes for collections to ensure efficient sorting
+   */
+  async createIndexes() {
+    try {
+      console.log('📊 Creating database indexes...');
+      
+      // Create indexes for board_games collection
+      const gamesCollection = this.getCollection('board_games');
+      await gamesCollection.createIndex({ name: 1 }, { name: 'name_asc' });
+      await gamesCollection.createIndex({ id: 1 }, { name: 'id_unique', unique: true });
+      await gamesCollection.createIndex({ rank: 1 }, { name: 'rank_asc' });
+      
+      // Create indexes for games_search collection
+      const searchCollection = this.getCollection('games_search');
+      await searchCollection.createIndex({ name: 1 }, { name: 'name_asc' });
+      await searchCollection.createIndex({ id: 1 }, { name: 'id_unique', unique: true });
+      
+      console.log('✅ Database indexes created successfully');
+      
+    } catch (error) {
+      console.error('❌ Failed to create indexes:', error);
+      // Don't throw error to avoid breaking the main process
+    }
+  }
 }
 
 module.exports = Database; 

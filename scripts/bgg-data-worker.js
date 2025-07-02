@@ -86,17 +86,6 @@ class SimpleBGGWorker {
 
       console.log(`🎲 Total games in database: ${gamesCount.toLocaleString()}`);
       console.log(`🔎 Total search entries: ${searchCount.toLocaleString()}`);
-      
-      if (gamesCount > 0) {
-        const topGames = await gamesCollection.find({})
-          .sort({ rank: 1 })
-          .limit(10)
-          .toArray();
-        console.log('\n🏆 Top 10 Board Games:');
-        topGames.forEach((game, index) => {
-          console.log(`   ${game.rank}. ${game.name} (${game.year_published}) - Bayes Avg: ${game.bayes_average}`);
-        });
-      }
     } catch (error) {
       console.error('Error showing stats:', error);
     }
@@ -115,10 +104,6 @@ async function main() {
     await worker.processAllData();
     await worker.disconnect();
     console.log('\n🎉 All done! Your BGG data is now in MongoDB.');
-    console.log('\n💡 You can query your data with:');
-    console.log('   mongo bg_market');
-    console.log('   db.board_games.find().limit(5).pretty()');
-    console.log('   db.games_search.find().limit(5).pretty()');
   } catch (error) {
     console.error('\n💥 Worker failed:', error.message);
     await worker.disconnect();

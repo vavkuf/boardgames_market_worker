@@ -13,7 +13,9 @@
     "test-bgg": "node scripts/test-with-sample.js",
     "quick-test": "node scripts/quick-bgg-test.js",
     "test-fresh": "node scripts/test-fresh-url.js",
-    "bgg-data": "node scripts/bgg-data-worker.js"
+    "bgg-data": "node scripts/bgg-data-worker.js",
+    "sort-data": "node scripts/sort-existing-data.js",
+    "add-timestamps": "node scripts/add-timestamps.js"
   },
   "keywords": ["worker", "cron", "mongodb", "board-games"],
   "author": "",
